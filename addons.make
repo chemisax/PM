@@ -1,0 +1,8 @@
+ofxGui
+ofxKinect
+ofxOpenCv
+ofxSvg
+ofxThreadedImageLoader
+ofxVectorGraphics
+ofxXmlSettings
+ofxGLWarper
