@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxKinect.h"
+#include "alertSystem.h"
 
 class testApp : public ofBaseApp{
 
@@ -21,4 +22,5 @@ class testApp : public ofBaseApp{
 		void gotMessage(ofMessage msg);
 		
         ofxKinect kinect;
+        alertSystem *Alert;
 };

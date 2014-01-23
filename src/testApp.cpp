@@ -1,18 +1,25 @@
 #include "testApp.h"
+#include "ofMain.h"
 
 //--------------------------------------------------------------
 void testApp::setup(){
-
+    ofSetFrameRate(30);
+    Alert = new alertSystem(30*5);
+    Alert -> show("Welcome to AMI Server <3");
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
-
+    ofBackground(0, 0, 0);
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-
+    // Calls for classes that write to the screen
+    Alert -> draw();
+    
+    
+    
 }
 
 //--------------------------------------------------------------
