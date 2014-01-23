@@ -7,7 +7,7 @@ void testApp::setup(){
     ofSetFrameRate(30);
     
     //Start the alert system
-    Alert = new alertSystem(30*3);
+    Alert = new alertSystem(30*8);
     Alert -> show("Welcome to AMI Server <3");
     
     //Start the messenger system
