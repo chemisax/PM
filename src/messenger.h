@@ -10,6 +10,11 @@
 #define __AMI__messenger__
 
 #include <iostream>
+#include "ofxOsc.h"
+
+#define LIST_PORT 9999
+#define SEND_PORT 9998
+#define HOST "localhost"
 
 #endif /* defined(__AMI__messenger__) */
 
@@ -18,7 +23,13 @@
 class messenger {
 public:
     messenger();
-    void send();
+    void sendOSC(ofxOscMessage message);
+    
+    string update();
 private:
+    ofxOscReceiver receiver;
+    ofxOscSender sender;
+    
     void messageReceived();
+    string dumpOSC(ofxOscMessage m);
 };

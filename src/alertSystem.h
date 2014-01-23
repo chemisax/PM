@@ -25,4 +25,6 @@ private:
     int life,counter,alert_id;
     string msg;
     bool live;
+    
+    int fadeGetAlpha(float startFrom);
 };
