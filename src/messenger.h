@@ -13,8 +13,10 @@
 #include "ofxOsc.h"
 
 #define LIST_PORT 9999
-#define SEND_PORT 9998
+#define SEND_PORT 9998  //slave app
+#define SEND_PORT2 8080 //node.js
 #define HOST "localhost"
+#define HOST_2 "localhost"
 
 #endif /* defined(__AMI__messenger__) */
 
@@ -23,12 +25,14 @@
 class messenger {
 public:
     messenger();
-    void sendOSC(ofxOscMessage message);
+    void sendOSC(ofxOscMessage message, bool sendToNodeJS);
     
-    string update();
+    ofxOscMessage update();
 private:
     ofxOscReceiver receiver;
     ofxOscSender sender;
+    ofxOscSender senderNode;
+    ofxOscMessage emptyMessage;
     
     void messageReceived();
     string dumpOSC(ofxOscMessage m);

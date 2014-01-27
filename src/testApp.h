@@ -4,6 +4,8 @@
 #include "ofxKinect.h"
 #include "alertSystem.h"
 #include "messenger.h"
+#include "ofxOsc.h"
+#include "ofxOpenCv.h"
 
 class testApp : public ofBaseApp{
 
@@ -21,8 +23,21 @@ class testApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
+    
+        void exit();
+    
+        int backgroundColor[3] = {0,0,0};
+        int spectrumColor[3] = {120,15,255};
+    
         ofxKinect kinect;
         alertSystem *Alert;
         messenger *Messenger;
+        ofSoundPlayer soundPlayer;
+        ofxOscMessage msgOut;
+        ofxCvColorImage colorImg;
+    
+        void drawCalibrationLines();
+        void updateMessenger();
+        bool calibrating;
+    
 };
