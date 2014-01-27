@@ -11,7 +11,6 @@
 
 messenger::messenger() {
     ofLog(OF_LOG_NOTICE, "Messenger started");
-    ofLog(OF_LOG_NOTICE, " >Messenger can just receive messages");
     receiver.setup(LIST_PORT);
     sender.setup(HOST, SEND_PORT);
     senderNode.setup(HOST_2, SEND_PORT2);
