@@ -10,11 +10,16 @@
 #include "ofMain.h"
 
 alertSystem::alertSystem(int live_time) {
+    this -> pointer = new int(100);
     life = live_time;
     live = false;
     counter = 0;
     alert_id = 0;
     msg = "";
+}
+
+alertSystem :: ~alertSystem(){
+    delete this -> pointer;
 }
 
 void alertSystem::show(string s_msg) {
@@ -28,7 +33,7 @@ void alertSystem::show(string s_msg) {
 void alertSystem::draw() {
     if (live && counter <= life) {
         ofSetColor(255,255,255,fadeGetAlpha(0.8));
-        ofRect(20,20,600,20);
+        ofRect(20,20,ofGetWidth()-40,20);
         ofSetColor(0,0,0,fadeGetAlpha(0.8));
         ofDrawBitmapString("A"+ofToString(alert_id) + ": "+msg, 25, 35);
         counter ++;

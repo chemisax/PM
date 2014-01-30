@@ -1,0 +1,84 @@
+/* @override 
+	http://localhost:8080/style.css */
+
+body {
+	background-color: #000000;
+	font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+	color: #ffffff;
+	text-align: center;
+	text-transform: capitalize;
+}
+
+h1 {
+	font-size: 20px;
+}
+
+#console {
+	background-color: #393939;
+	height: 130px;
+	font-size: 15px;
+	overflow: hidden;
+	border-radius:5px;	border: 1px solid #505050;
+	
+}
+#console p {
+	margin: 3px 0;
+	padding: 0;
+	font-size: 14px;
+	text-transform: lowercase;
+}
+#dataout {
+	overflow: hidden;
+	background: #515151;
+	width: 100%;
+	border-top: 1px solid #5e5e5e;
+	text-transform: lowercase;
+	font-size: 14px;
+	height: 110px;
+}
+#beatRate {
+	font-size: 24px;
+	height: 70px;
+	width: 180px;
+	margin-right: auto;
+	margin-left: auto;
+}
+#br_heart {
+	width: 70px;
+	height: 70px;
+	position: absolute;
+	overflow: hidden;
+	font-size: 74px;
+	line-height: 57px;
+	color: #d6d6d6;
+}
+#beat_rate {
+	margin-left: 70px;
+	width: 150px;
+	text-align: left;
+	padding-top: 17px;
+}
+ul {
+	display: block;
+	list-style: none;
+	margin: 10px 0px 0px;
+	padding: 0px;
+}
+li {
+	display: inline-block;
+	padding: 0;
+	margin: 0 0 10px;
+	background-color: #515151;
+	border-radius:5px;	
+	border: 1px solid #505050;
+	overflow: hidden;
+}
+a {	
+	display: block;
+	color: #ffffff;
+	text-decoration: none;
+	padding: 5px;
+	height: 40px;
+	font-size: 18px;
+	line-height: 40px;
+}

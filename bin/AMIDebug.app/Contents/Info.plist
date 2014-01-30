@@ -9,9 +9,9 @@
 	<key>CFBundleExecutable</key>
 	<string>AMIDebug</string>
 	<key>CFBundleIconFile</key>
-	<string>icon-debug.icns</string>
+	<string>icon-server.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.openFrameworks</string>
+	<string>com.chemisax.AMIServer</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>

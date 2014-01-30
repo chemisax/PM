@@ -11,25 +11,25 @@
 
 messenger::messenger() {
     ofLog(OF_LOG_NOTICE, "Messenger started");
-    ofLog(OF_LOG_NOTICE, " >Messenger can just receive messages");
     receiver.setup(LIST_PORT);
     sender.setup(HOST, SEND_PORT);
+    senderNode.setup(HOST_2, SEND_PORT2);
+    emptyMessage.setAddress("empty");    
 }
-string messenger::update() {
+
+ofxOscMessage messenger::update() {
     while(receiver.hasWaitingMessages()) {
         ofxOscMessage m;
         receiver.getNextMessage(&m);
-        ofLog(OF_LOG_NOTICE, "incoming message");
-        return dumpOSC(m);
+        return m;
+        //return dumpOSC(m);
     }
-    return "-1";
+    return emptyMessage;
 }
 
-void messenger::sendOSC(ofxOscMessage message) {
+void messenger::sendOSC(ofxOscMessage message, bool sendToNodeJS) {
     sender.sendMessage(message);
-}
-void messenger::messageReceived() {
-    ofLog(OF_LOG_NOTICE, "Message Received");
+    if (sendToNodeJS) senderNode.sendMessage(message);
 }
 
 string messenger::dumpOSC(ofxOscMessage m) {
@@ -45,5 +45,4 @@ string messenger::dumpOSC(ofxOscMessage m) {
             msg_string += m.getArgAsString(i);
     }
     return msg_string;
-    //cout << msg_string << endl;
 }
