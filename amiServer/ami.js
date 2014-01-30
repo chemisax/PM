@@ -33,6 +33,8 @@ appIOsocket.on('connection', function (socket) {
   eventEmitter.on('oscEvent', function (msg) {
     if (msg[2][0] == "AMI/master/broadcast/status") {
       socket.emit("ami-message", {message: "status: "+msg[2][1]});
+    } else if (msg[2][0] == "AMI/master/bpm") {
+      socket.emit("ami-bpm",{message: msg[2][1]});
     } else {
       socket.emit("ami-message", {message: msg[2]});
     }

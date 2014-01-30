@@ -14,16 +14,13 @@ messenger::messenger() {
     receiver.setup(LIST_PORT);
     sender.setup(HOST, SEND_PORT);
     senderNode.setup(HOST_2, SEND_PORT2);
-    
-    emptyMessage.setAddress("empty");
-    
+    emptyMessage.setAddress("empty");    
 }
 
 ofxOscMessage messenger::update() {
     while(receiver.hasWaitingMessages()) {
         ofxOscMessage m;
         receiver.getNextMessage(&m);
-        //ofLog(OF_LOG_NOTICE, "incoming message");
         return m;
         //return dumpOSC(m);
     }
@@ -33,10 +30,6 @@ ofxOscMessage messenger::update() {
 void messenger::sendOSC(ofxOscMessage message, bool sendToNodeJS) {
     sender.sendMessage(message);
     if (sendToNodeJS) senderNode.sendMessage(message);
-}
-
-void messenger::messageReceived() {
-    ofLog(OF_LOG_NOTICE, "Message Received");
 }
 
 string messenger::dumpOSC(ofxOscMessage m) {
@@ -52,5 +45,4 @@ string messenger::dumpOSC(ofxOscMessage m) {
             msg_string += m.getArgAsString(i);
     }
     return msg_string;
-    //cout << msg_string << endl;
 }

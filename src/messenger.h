@@ -26,7 +26,6 @@ class messenger {
 public:
     messenger();
     void sendOSC(ofxOscMessage message, bool sendToNodeJS);
-    
     ofxOscMessage update();
 private:
     ofxOscReceiver receiver;
@@ -34,6 +33,5 @@ private:
     ofxOscSender senderNode;
     ofxOscMessage emptyMessage;
     
-    void messageReceived();
     string dumpOSC(ofxOscMessage m);
 };

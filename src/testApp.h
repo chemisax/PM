@@ -7,6 +7,8 @@
 #include "ofxOsc.h"
 #include "ofxOpenCv.h"
 
+#include <list>
+
 class testApp : public ofBaseApp{
 
 	public:
@@ -24,26 +26,35 @@ class testApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
-        void exit();
-    
-        int backgroundColor[3] = {0,0,0};
-        int spectrumColor[3] = {120,15,255};
-    
         alertSystem *Alert;
         messenger *Messenger;
         ofSoundPlayer soundPlayer;
         ofxOscMessage msgOut;
-
+        list<alertSystem *> lines;
+        list<alertSystem *> :: iterator itr;
+    
+        int spectrumColor[3] = {120,15,255},
+            backgroundColor[3] = {0,0,0},
+            longestDistance,
+            soundDuration,
+            defaultRate,
+            rateCounter,
+            heikin_update_rate,
+            heikin_counter,
+            heikin_update_current,
+            oscduration,
+            kinect_last_update,
+            kinect_tolerance,
+            heikin[3];
+        float rate,
+            beat_rate;
+        bool calibrating;
+        
+        void exit();
         void drawCalibrationLines();
         void updateMessenger();
-        bool calibrating;
+        void spectrum();
+        void update_bpm();
+        void heartBeat ();
     
-        //test line
-        bool line_live;
-        bool line_speed;
-    
-    int longestDistance,soundDuration, defaultRate, rateCounter, heikin_update_rate, heikin_counter,heikin_update_current, oscduration, kinect_last_update, kinect_tolerance;
-    float rate,beat_rate;
-    int heikin[3];
-
 };

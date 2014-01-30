@@ -18,7 +18,9 @@
 
 class alertSystem {
 public:
+    int *pointer;
     alertSystem(int live_time);
+    ~alertSystem();
     void show(string s_msg);
     void draw();
 private:
