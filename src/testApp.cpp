@@ -8,7 +8,7 @@ void testApp::setup(){
     ofSetFrameRate(30);
     
     //initialize variables
-    calibrating = false;
+    calibrating = true;
     
     //Start the alert system
     Alert = new alertSystem(30*2);
@@ -17,28 +17,25 @@ void testApp::setup(){
     //Start the messenger system
     Messenger = new messenger();
     
-    //Start the song
-    soundPlayer.loadSound("piensa_en_mi.mp3");
-    soundPlayer.setLoop(true);
-    soundPlayer.play();
-    soundPlayer.setPaused(true);
+    //Start the sound
+    soundPlayer.loadSound("hb.mp3");
     
-    //initialize kinect
-    kinect.setRegistration(true);
+    //soundEvent
     
-    kinect.init();
-    //kinect.init(true); // shows infrared instead of RGB video image
-    //kinect.init(false, false); // disable video image (faster fps)
-    kinect.open();
+    soundDuration = 22; // frames
+    defaultRate = 90; //frames
+    rateCounter = 0;
     
-    // print the intrinsic IR sensor values
-    if(kinect.isConnected()) {
-        ofLogNotice() << "sensor-emitter dist: " << kinect.getSensorEmitterDistance() << "cm";
-        ofLogNotice() << "sensor-camera dist:  " << kinect.getSensorCameraDistance() << "cm";
-        ofLogNotice() << "zero plane pixel size: " << kinect.getZeroPlanePixelSize() << "mm";
-        ofLogNotice() << "zero plane dist: " << kinect.getZeroPlaneDistance() << "mm";
-    }
-    
+    beat_rate = defaultRate;
+    heikin_update_rate = 10;
+    heikin_update_current = 0;
+    longestDistance = 450;
+    heikin_counter = 0;
+    oscduration = 0;
+    for (int i=0; i<3; i++) heikin[i] = defaultRate;
+
+    kinect_last_update = 0;
+    kinect_tolerance = 30;
 }
 
 //--------------------------------------------------------------
@@ -50,19 +47,34 @@ void testApp::update(){
     //Set background color
     ofBackground(backgroundColor[0], backgroundColor[1], backgroundColor[2]);
     
-    //Kinect
-    kinect.update();
-
+    //RateCounter
+    if ((ofGetFrameNum()-kinect_last_update) <= kinect_tolerance) {
+        if (heikin_update_current == heikin_update_rate) {
+            heikin_update_current = 0;
+            heikin[heikin_counter] = oscduration;
+            
+            if (heikin_counter == 3) {
+                heikin_counter = 0;
+                rate = ((float)((heikin[0]+heikin[1]+heikin[2])/3)/longestDistance)*defaultRate;
+                beat_rate = ((int)rate > soundDuration) ? rate : soundDuration+1;
+                //cout << beat_rate << endl;
+            } else {
+                heikin_counter++;
+            }
+            
+        } else {
+            heikin_update_current++;
+        }
+    } else {
+        beat_rate = defaultRate;
+    }
+    
 }
 
 //--------------------------------------------------------------
 void testApp::draw() {
-    
-    //Kinect
-    kinect.drawDepth(20, 20, 640, 480);
-    
-   // Alert -> show(ofToString(kinect.getDistanceAt(200, 200)));
-    
+
+
     //Draw the spectrum of the song
     int divs = 50;
     float *spectrum = ofSoundGetSpectrum(divs);
@@ -82,6 +94,20 @@ void testApp::draw() {
     
     //Draw calibration lines
     drawCalibrationLines();
+    
+    //play heartbeat/call line
+    if (rateCounter >= (int) beat_rate) {
+        rateCounter = 0;
+        soundPlayer.play();
+        
+        line = new Line();
+        line -> play();
+        
+    } else {
+        rateCounter ++;
+    }
+
+    //cout << rateCounter << endl;
     
     // Calls for classes that write to the screen
     Alert -> draw();
@@ -105,7 +131,7 @@ void testApp::updateMessenger() {
         
         if (msgOut.getAddress() == "/ami/webClient/order") {
             
-            Alert -> show(msgOut.getArgAsString(0));
+            //Alert -> show(msgOut.getArgAsString(0));
             
             // Switch for the different orders from Node.js
             if (msgOut.getArgAsString(0) == "play") {
@@ -148,6 +174,10 @@ void testApp::updateMessenger() {
             mess.addStringArg("Connection established with AMI Master Server");
             Messenger -> sendOSC(mess, true);
         
+        } else if (msgOut.getAddress() == "AMI/kinectServer/position") {
+            oscduration = msgOut.getArgAsInt32(2);
+            kinect_last_update = ofGetFrameNum();
+            //Alert -> show("Kinect: "+ofToString(msgOut.getArgAsInt32(0))+","+ofToString(msgOut.getArgAsInt32(1))+","+ofToString(msgOut.getArgAsInt32(2)));
         }
     }
 }
@@ -183,8 +213,7 @@ void testApp::keyPressed(int key){
 
 //--------------------------------------------------------------
 void testApp::exit() {
-    kinect.setCameraTiltAngle(0); // zero the tilt on exit
-    kinect.close();
+    Alert -> show("exit");
 }
 
 //--------------------------------------------------------------

@@ -23,7 +23,7 @@ ofxOscMessage messenger::update() {
     while(receiver.hasWaitingMessages()) {
         ofxOscMessage m;
         receiver.getNextMessage(&m);
-        ofLog(OF_LOG_NOTICE, "incoming message");
+        //ofLog(OF_LOG_NOTICE, "incoming message");
         return m;
         //return dumpOSC(m);
     }

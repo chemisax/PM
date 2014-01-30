@@ -29,15 +29,21 @@ class testApp : public ofBaseApp{
         int backgroundColor[3] = {0,0,0};
         int spectrumColor[3] = {120,15,255};
     
-        ofxKinect kinect;
         alertSystem *Alert;
         messenger *Messenger;
         ofSoundPlayer soundPlayer;
         ofxOscMessage msgOut;
-        ofxCvColorImage colorImg;
-    
+
         void drawCalibrationLines();
         void updateMessenger();
         bool calibrating;
     
+        //test line
+        bool line_live;
+        bool line_speed;
+    
+    int longestDistance,soundDuration, defaultRate, rateCounter, heikin_update_rate, heikin_counter,heikin_update_current, oscduration, kinect_last_update, kinect_tolerance;
+    float rate,beat_rate;
+    int heikin[3];
+
 };
