@@ -46,11 +46,16 @@ class testApp : public ofBaseApp{
             oscduration,
             kinect_last_update,
             kinect_tolerance,
-            heikin[3];
+            heikin[3],
+            line_counter,
+            frameCounter,
+            ami_alpha,
+            frame_counter_ami;
         float rate,
             beat_rate;
-        bool calibrating;
+        bool calibrating,ami_yonda;
         surface *amiSurface;
+    
     
         void exit();
         void drawCalibrationLines();
@@ -58,4 +63,5 @@ class testApp : public ofBaseApp{
         void update_bpm();
         void heartBeat ();
         void Lines();
+        void ami_draw();
 };

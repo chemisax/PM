@@ -24,7 +24,7 @@ void testApp::setup(){
     
     //BPM & Timers
     soundDuration = 4;
-    defaultRate = 5;
+    defaultRate = 60;
     rateCounter = 0;
     beat_rate = defaultRate;
     heikin_update_rate = 10;
@@ -35,6 +35,7 @@ void testApp::setup(){
     kinect_last_update = 0;
     kinect_tolerance = 30;
     for (int i=0; i<3; i++) heikin[i] = defaultRate;
+    ami_yonda = false;
     
     waveMsg.setAddress("AMI/master/screen1/command/wave");
     waveMsg.addStringArg("play");
@@ -44,7 +45,9 @@ void testApp::setup(){
     amiSurface -> edit();
     
     calibration.loadImage("calibration.png");
-
+    line_counter = 0;
+    ami_alpha = 255;
+    frame_counter_ami = 0;
     
     /*
     mylist.push_back(new alertSystem(30*2));
@@ -73,13 +76,13 @@ void testApp::update(){
     //RateCounter
     update_bpm();
     
-    cout << beat_rate << endl;
-    
     //play heartbeat/call line
     heartBeat();
     
     //Update AMI
     amiSurface -> update();
+    
+    Alert -> show(ofToString((float)beat_rate/(float)defaultRate));
 }
 
 //--------------------------------------------------------------
@@ -91,9 +94,8 @@ void testApp::draw() {
     //Draw line animations
     Lines();
     
-    //Draw AMI
-    ofRect(0, 0, ofGetWidth(), ofGetHeight());
-    amiSurface -> draw();
+    //Draw Ami
+    ami_draw();
     
     //Draw mask
     calibration.draw(0,0);
@@ -123,6 +125,7 @@ void testApp::heartBeat () {
         ofxOscMessage msg;
         rateCounter = 0;
         soundPlayer.play();
+        line_counter ++;
         lines.push_back(new screenAnimation(255,255,255,ofRandom(1,30),20));
         msg.setAddress("AMI/master/bpm");
         msg.addIntArg(beat_rate);
@@ -213,6 +216,55 @@ void testApp::keyPressed(int key){
             break;
         default:
             break;
+    }
+}
+
+void testApp::ami_draw() {
+    
+    if (beat_rate/defaultRate < 0.2 && line_counter > 14) {
+        if (!ami_yonda) {
+            ami_yonda = true;
+            ofxOscMessage mensaje;
+            mensaje.setAddress("AMI/master/order/ami_dasu");
+            mensaje.addStringArg("true");
+            Messenger -> sendOSC(mensaje, false);
+        }
+        
+        frame_counter_ami ++;
+        
+        if (frame_counter_ami <= 8) ami_alpha = 255*((float)frame_counter_ami/8);
+        
+        if (frame_counter_ami > 8) ami_alpha = 255;
+        
+        ofSetColor(255, 255, 255,ami_alpha);
+        ofRect(0, 0, ofGetWidth(), ofGetHeight());
+        amiSurface -> draw();
+        
+        if (frame_counter_ami == 30) frameCounter = 0;
+        if (frame_counter_ami > 31) {
+            frameCounter ++;
+            ami_alpha = 255-(255*((float)frameCounter/30));
+        }
+        
+        if (frameCounter == 30) {
+            frameCounter = 0;
+            line_counter = 0;
+            ami_alpha = 255;
+            frame_counter_ami = 0;
+            ami_yonda = false;
+        }
+        ofSetColor(0, 0, 0);
+    } else if (calibrating) {
+        ofSetColor(255, 0, 0);
+        ofRect(0, 0, ofGetWidth(), ofGetHeight());
+        amiSurface -> draw();
+
+    } else {
+        frameCounter = 0;
+        line_counter = 0;
+        ami_alpha = 255;
+        frame_counter_ami = 0;
+        ami_yonda = false;
     }
 }
 
