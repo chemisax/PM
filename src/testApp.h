@@ -6,8 +6,9 @@
 #include "messenger.h"
 #include "ofxOsc.h"
 #include "ofxOpenCv.h"
-
+#include "screenAnimation.h"
 #include <list>
+#include "surface.h"
 
 class testApp : public ofBaseApp{
 
@@ -29,12 +30,12 @@ class testApp : public ofBaseApp{
         alertSystem *Alert;
         messenger *Messenger;
         ofSoundPlayer soundPlayer;
-        ofxOscMessage msgOut;
-        list<alertSystem *> lines;
-        list<alertSystem *> :: iterator itr;
+        ofxOscMessage msgOut,waveMsg;
+        list<screenAnimation *> lines;
+        list<screenAnimation *> :: iterator itr;
+        ofImage calibration;
     
-        int spectrumColor[3] = {120,15,255},
-            backgroundColor[3] = {0,0,0},
+        int backgroundColor[3] = {0,0,0},
             longestDistance,
             soundDuration,
             defaultRate,
@@ -49,12 +50,12 @@ class testApp : public ofBaseApp{
         float rate,
             beat_rate;
         bool calibrating;
-        
+        surface *amiSurface;
+    
         void exit();
         void drawCalibrationLines();
         void updateMessenger();
-        void spectrum();
         void update_bpm();
         void heartBeat ();
-    
+        void Lines();
 };

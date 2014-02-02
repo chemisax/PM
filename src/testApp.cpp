@@ -5,6 +5,8 @@
 //--------------------------------------------------------------
 void testApp::setup(){
     
+    ofSetFullscreen(true);
+    
     ofSetFrameRate(30);
     
     calibrating = false;
@@ -18,10 +20,11 @@ void testApp::setup(){
     
     //Start the sound
     soundPlayer.loadSound("hb.mp3");
+    soundPlayer.setVolume(.3);
     
     //BPM & Timers
     soundDuration = 4;
-    defaultRate = 90;
+    defaultRate = 5;
     rateCounter = 0;
     beat_rate = defaultRate;
     heikin_update_rate = 10;
@@ -33,6 +36,15 @@ void testApp::setup(){
     kinect_tolerance = 30;
     for (int i=0; i<3; i++) heikin[i] = defaultRate;
     
+    waveMsg.setAddress("AMI/master/screen1/command/wave");
+    waveMsg.addStringArg("play");
+    
+    //Create AMI warp container
+    amiSurface = new surface("AMI", "ami.png", "ami_calibration.xml",200,647);
+    amiSurface -> edit();
+    
+    calibration.loadImage("calibration.png");
+
     
     /*
     mylist.push_back(new alertSystem(30*2));
@@ -61,51 +73,63 @@ void testApp::update(){
     //RateCounter
     update_bpm();
     
+    cout << beat_rate << endl;
+    
     //play heartbeat/call line
     heartBeat();
+    
+    //Update AMI
+    amiSurface -> update();
 }
 
 //--------------------------------------------------------------
 void testApp::draw() {
-
-    //Draw the spectrum of the song & send the data to display 2
-    spectrum();
     
     //Draw calibration lines if calibrating
     drawCalibrationLines();
     
-    // Calls for classes that write to the screen
+    //Draw line animations
+    Lines();
+    
+    //Draw AMI
+    ofRect(0, 0, ofGetWidth(), ofGetHeight());
+    amiSurface -> draw();
+    
+    //Draw mask
+    calibration.draw(0,0);
+    
+    // Write alerts if available
     Alert -> draw();
+
+}
+
+//--------------------------------------------------------------
+void testApp::Lines () {
+    //Call the draw Method
+    for(itr = lines.begin() ; itr != lines.end() ; itr ++) (*itr) -> line_draw();
+    
+    //Delete lines that are no longer being displayed
+    for(itr = lines.begin() ; itr != lines.end() ; itr ++) {
+        if (!(*itr) -> isPlaying()) {
+            Messenger -> sendOSC(waveMsg, false);
+            lines.erase(itr);
+        }
+    }
 }
 
 //--------------------------------------------------------------
 void testApp::heartBeat () {
     if (rateCounter >= (int) beat_rate) {
+        ofxOscMessage msg;
         rateCounter = 0;
         soundPlayer.play();
-        ofxOscMessage msg;
+        lines.push_back(new screenAnimation(255,255,255,ofRandom(1,30),20));
         msg.setAddress("AMI/master/bpm");
         msg.addIntArg(beat_rate);
         Messenger -> sendOSC(msg, true);
     } else {
         rateCounter ++;
     }
-}
-
-//--------------------------------------------------------------
-void testApp::spectrum() {
-    int divs = 50;
-    float *spectrum = ofSoundGetSpectrum(divs);
-    ofxOscMessage spect;
-    spect.setAddress("AMI/master/display1/spectrum");
-    for (int i=0; i<divs; i++) {
-        ofSetColor(spectrumColor[0],spectrumColor[1],spectrumColor[2]);
-        spect.addFloatArg(spectrum[i]);
-        ofRect((ofGetWidth()/divs)*i, 0, ofGetWidth()/divs, spectrum[i]*ofGetHeight());
-    }
-    // Send the spectrum to the other display
-    Messenger -> sendOSC(spect, false);
-    spect.clear();
 }
 
 //--------------------------------------------------------------
@@ -145,27 +169,11 @@ void testApp::updateMessenger() {
         if (msgOut.getAddress() == "/ami/webClient/order") {
             Alert -> show(msgOut.getArgAsString(0));
             // Switch for the different orders from Node.js
-            if (msgOut.getArgAsString(0) == "play") {
-                soundPlayer.setPaused(false);
-            } else if (msgOut.getArgAsString(0) == "stop") {
-                soundPlayer.setPaused(true);
-            } else if (msgOut.getArgAsString(0) == "status") {
+            if (msgOut.getArgAsString(0) == "status") {
                 ofxOscMessage mess;
                 mess.setAddress("AMI/master/broadcast/status");
                 mess.addStringArg("AMI Master/Server is online");
                 Messenger -> sendOSC(mess, true);
-            } else if (msgOut.getArgAsString(0) == "chbg") {
-                for (int i=0; i<3; i++) backgroundColor[i] = ofRandom(0,255);
-                ofxOscMessage background;
-                background.setAddress("AMI/master/display1/background");
-                for (int i=0; i<3; i++) background.addIntArg(ofRandom(0,255));
-                Messenger -> sendOSC(background, false);
-            } else if (msgOut.getArgAsString(0) == "chclr") {
-                for (int i=0; i<3; i++) spectrumColor[i] = ofRandom(0,255);
-                ofxOscMessage spect;
-                spect.setAddress("AMI/master/display1/spectrumChange");
-                for (int i=0; i<3; i++) spect.addIntArg(ofRandom(0,255));
-                Messenger -> sendOSC(spect, false);
             }
         } else if (msgOut.getAddress() == "/nodejs" && msgOut.getArgAsString(0) == "nodeConnected") {
             ofxOscMessage mess;
@@ -198,6 +206,10 @@ void testApp::keyPressed(int key){
                 calibrating = true;
                 Alert -> show("calibration on");
             }
+            break;
+        case 115:
+            Alert -> show("saved");
+            amiSurface -> saveSurf();
             break;
         default:
             break;

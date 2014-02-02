@@ -11,6 +11,7 @@
 
 #include <iostream>
 #include "ofMain.h"
+#include "messenger.h"
 
 #endif /* defined(__AMI__alertSystem__) */
 
