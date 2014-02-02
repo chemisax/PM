@@ -25,7 +25,7 @@ public:
     
 private:
     int color[3];
-    float friction,r,speed,max_size;
+    float friction,ra,speed,max_size;
     bool playing;
     
 };
