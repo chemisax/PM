@@ -58,6 +58,8 @@
 		E7F985F815E0DEA3003869B5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F985F515E0DE99003869B5 /* Accelerate.framework */; };
 		E82CBD921891127200C81350 /* messenger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E82CBD901891127200C81350 /* messenger.cpp */; };
 		E82CBD95189112FA00C81350 /* alertSystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E82CBD93189112FA00C81350 /* alertSystem.cpp */; };
+		E84CF1F8189A981800F6B599 /* screenAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E84CF1F6189A981800F6B599 /* screenAnimation.cpp */; };
+		E84CF204189BDCFB00F6B599 /* surface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E84CF201189BDCFB00F6B599 /* surface.cpp */; };
 		E86F15C718913D3800658557 /* ofxOscBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81B48171891337B00397702 /* ofxOscBundle.cpp */; };
 		E86F15C818913D3800658557 /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81B48191891337B00397702 /* ofxOscMessage.cpp */; };
 		E86F15C918913D3800658557 /* ofxOscParameterSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E81B481B1891337B00397702 /* ofxOscParameterSync.cpp */; };
@@ -314,6 +316,10 @@
 		E82CBD911891127200C81350 /* messenger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messenger.h; sourceTree = "<group>"; };
 		E82CBD93189112FA00C81350 /* alertSystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = alertSystem.cpp; sourceTree = "<group>"; };
 		E82CBD94189112FA00C81350 /* alertSystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = alertSystem.h; sourceTree = "<group>"; };
+		E84CF1F6189A981800F6B599 /* screenAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = screenAnimation.cpp; sourceTree = "<group>"; };
+		E84CF1F7189A981800F6B599 /* screenAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = screenAnimation.h; sourceTree = "<group>"; };
+		E84CF201189BDCFB00F6B599 /* surface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = surface.cpp; sourceTree = "<group>"; };
+		E84CF202189BDCFB00F6B599 /* surface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = surface.h; sourceTree = "<group>"; };
 		E8AF1E9150AD818FA9D9195D /* version.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = version.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core/version.hpp; sourceTree = SOURCE_ROOT; };
 		E90542C149C83316678AB011 /* cxmisc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cxmisc.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv/cxmisc.h; sourceTree = SOURCE_ROOT; };
 		E91F55DEDD14B7F4BACED9B4 /* ofxSvg.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxSvg.h; path = ../../../addons/ofxSvg/src/ofxSvg.h; sourceTree = SOURCE_ROOT; };
@@ -881,9 +887,13 @@
 		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E84CF1F6189A981800F6B599 /* screenAnimation.cpp */,
+				E84CF1F7189A981800F6B599 /* screenAnimation.h */,
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* testApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* testApp.h */,
+				E84CF201189BDCFB00F6B599 /* surface.cpp */,
+				E84CF202189BDCFB00F6B599 /* surface.h */,
 				E82CBD901891127200C81350 /* messenger.cpp */,
 				E82CBD911891127200C81350 /* messenger.h */,
 				E82CBD93189112FA00C81350 /* alertSystem.cpp */,
@@ -1185,6 +1195,7 @@
 				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
 				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
 				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
+				E84CF1F8189A981800F6B599 /* screenAnimation.cpp in Sources */,
 				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
 				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
 				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
@@ -1201,6 +1212,7 @@
 				1D5F3298C2FA073628012944 /* ofxCvContourFinder.cpp in Sources */,
 				169D3C72FDE6C5590A1616F5 /* ofxCvFloatImage.cpp in Sources */,
 				FB09C6B2A1DA0EA217240CB8 /* ofxCvGrayscaleImage.cpp in Sources */,
+				E84CF204189BDCFB00F6B599 /* surface.cpp in Sources */,
 				E212C821D1064B92DD953A42 /* ofxCvHaarFinder.cpp in Sources */,
 				63020F16C7E8DED980111241 /* ofxCvImage.cpp in Sources */,
 				D3301F6A0B43BB293ED97C1D /* ofxCvShortImage.cpp in Sources */,

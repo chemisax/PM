@@ -15,7 +15,7 @@
 #define LIST_PORT 9999
 #define SEND_PORT 9998  //slave app
 #define SEND_PORT2 8080 //node.js
-#define HOST "192.168.1.82"
+#define HOST "192.168.1.6" //192.168.1.82
 #define HOST_2 "localhost"
 
 #endif /* defined(__AMI__messenger__) */
